@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Rubicon Protocols</title>
+    <style>
+      body {
+        color: #202e39;
+        background: #fefefe;
+      }
+      label:after {
+        content: ":";
+      }
+      label + input {
+        margin-right: 2em;
+      }
+      #linkContainer {
+        margin: 1em;
+        border: 1px dashed black;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>URI generator</h3>
+    <p>Enter your BMO username and an activity ID and press submit.</p>
+    <form id="form" submit="void">
+      <label for="username">Username</label>
+      <input type="email" name="username" required />
+      <label for="activityId">Activity ID</label>
+      <input type="text" name="activityId" required pattern="[0-9]+" />
+      <button type="submit">Submit</button>
+    </form>
+    <div id="linkContainer"></div>
+    <script type="text/javascript">
+      {
+        function createAnchor(isEditor, userId, action, actionId) {
+          const proto = isEditor ? "boardmakereditor" : "boardmakerplayer";
+          const href =
+            `${proto}://${userId}/${action}` +
+            (actionId != null ? `/${actionId}` : "");
+          const a = document.createElement("a");
+          a.href = href;
+          a.innerText = href;
+          return a;
+        }
+
+        function createList(elements) {
+          const ul = document.createElement("ul");
+          for (const e of elements) {
+            const li = document.createElement("li");
+            li.appendChild(e);
+            ul.appendChild(li);
+          }
+          return ul;
+        }
+
+        window.onload = function() {
+          const form = document.getElementById("form");
+          form.addEventListener("submit", e => {
+            e.preventDefault();
+            const email = form.querySelector("input[name=username]").value;
+            const activityId = form.querySelector("input[name=activityId]")
+              .value;
+            if (email == null || activityId == null) {
+              alert("Error: missing email or activity ID");
+            }
+            const container = document.getElementById("linkContainer");
+            const links = [
+              createAnchor(true, email, "Edit", activityId),
+              createAnchor(true, email, "Settings", activityId),
+              createAnchor(true, email, "Templates"),
+              createAnchor(false, email, "Play", activityId),
+              createAnchor(false, email, "Classroom"),
+              createAnchor(false, email, "StudentCenter"),
+              createAnchor(false, email, "UserSettings"),
+              createAnchor(false, email, "Playlist")
+            ];
+            const list = createList(links);
+            container.innerHTML = "";
+            container.appendChild(list);
+          });
+        };
+      }
+    </script>
+  </body>
+</html>
