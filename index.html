@@ -26,7 +26,7 @@
     <form id="form" submit="void">
       <label for="username">Username</label>
       <input type="email" name="username" required />
-      <label for="activityId">Activity ID</label>
+      <label for="activityId">Activity/Student ID</label>
       <input type="text" name="activityId" required pattern="[0-9]+" />
       <button type="submit">Submit</button>
     </form>
@@ -54,9 +54,9 @@
           return ul;
         }
 
-        window.onload = function() {
+        window.onload = function () {
           const form = document.getElementById("form");
-          form.addEventListener("submit", e => {
+          form.addEventListener("submit", (e) => {
             e.preventDefault();
             const email = form.querySelector("input[name=username]").value;
             const activityId = form.querySelector("input[name=activityId]")
@@ -68,12 +68,12 @@
             const links = [
               createAnchor(true, email, "Edit", activityId),
               createAnchor(true, email, "Settings", activityId),
-              createAnchor(true, email, "Templates"),
               createAnchor(false, email, "Play", activityId),
               createAnchor(false, email, "Classroom"),
               createAnchor(false, email, "StudentCenter"),
               createAnchor(false, email, "UserSettings"),
-              createAnchor(false, email, "Playlist")
+              createAnchor(false, email, "UserSettings", activityId),
+              createAnchor(false, email, "Playlist"),
             ];
             const list = createList(links);
             container.innerHTML = "";
